@@ -7,12 +7,14 @@ CNVice performs the following analyses:
 3.	Estimates the population genotype frequency, conditioning on the observed diplotype distribution and the estimated fCNV and allele frequencies.
 4.	Uses trio information to improve the inference of an offspring’s genotype, by considering the parents’ diplotypes and the population genotype frequency.
 
-Requirements
+#Requirements
 CNVice is implemented in R. Packages aylmer and hwriter are installed when CNVice is executed.
  
-Input
+#Input
 The main input for CNVice is the distribution of observed diplotype frequencies of a given loci in a population. The distribution must always start with diplotype 0 (see the Examples section).  
 
-Running CNVice
+#Running CNVice
 The main function to be executed is: 
 executeCnvice(Nj,fpar,rept,document)
+
+Please read the user guide for more details.
