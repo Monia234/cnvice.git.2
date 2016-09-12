@@ -169,7 +169,7 @@ func.p.alelo<-function(Nj,pzero1,f,valor){
       Palelo.j[j] =  Palelo.j[j] + (1/2)*(PKL[j,j])
    }
    Palelo=list(f_otimo=F_OTIMO,freq.alelica=Palelo.j)
-   print(F_OTIMO)
+   #print(F_OTIMO)
   return(Palelo)
 }
 
@@ -224,7 +224,7 @@ CNVice <- function(Nj, pzero, maxit,f) {
     count = 0
   }
   resp=list(cnvice=novo, f=func.p.alelo(Nj,novo,f,valor)$f_otimo)
-  print(novo)
+  #print(novo)
   return(resp)
 }
 
@@ -260,7 +260,7 @@ CNVice.rep=function(Nj,repeticoes,f,filename='CNVice.RData',apagarRData=TRUE){
 	load(filename)
 	print('CNVice file loaded')
 	file.copy(filename,'bkpCNViceRData')
-  }else{#inicializa as variáveis
+  }else{#inicializa as variÃ¡veis
 	print('CNVice file generated')
 	print('CNVice repetition: 1')
 	aux=CNVice(Nj, p0.rep[1,], 1000,f)
@@ -438,7 +438,7 @@ trio <- function(pai,mae,filho,matriz){ # Child probability given parents and ge
     }
   }
 
-  cat("Offspring’s genotype probabilities:\n")
+  cat("OffspringÂ’s genotype probabilities:\n")
   filhos$prob=filhos$prob.filho.dado.paimae*filhos$prob.pai*filhos$prob.mae
   filhos$prob.final=round(filhos$prob/sum(filhos$prob),7)##final probability
   filhos$prob.mae=round(filhos$prob.mae,7)
@@ -487,25 +487,25 @@ TRV=function(Nj,repeticoes,filename_F0='TRV_F0.RData',filename_FS='TRV_Fs.RData'
 		file.remove(filename_F0)
 	}
 	
-	print('')
-	print('Generated values')
-	print('')
+	#print('')
+	#print('Generated values')
+	#print('')
 	
-	print('Prof with F=0')
-	print(resultadoF0$cnvice)
-	print('')
+	#print('Prof with F=0')
+	#print(resultadoF0$cnvice)
+	#print('')
 	
-	print('Prob with F<>0')
-	print(resultadoFs$cnvice)	
-	print('')
+	#print('Prob with F<>0')
+	#print(resultadoFs$cnvice)	
+	#print('')
 	
-	print('F values')	
-	print(resultadoFs$f)
-	print('')
+	#print('F values')	
+	#print(resultadoFs$f)
+	#print('')
 	
-	print('D1:')
+	#print('D1:')
 	d1 = -2*func.logPjTRV(0,Nj,resultadoF0$cnvice) +2*func.logPjTRV(resultadoFs$f,Nj,resultadoFs$cnvice)
-	print(d1)
+	#print(d1)
 	
 	#print('pValor:')
 	#print(0.5+pchisq(d1,1)/2)
