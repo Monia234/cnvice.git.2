@@ -260,7 +260,7 @@ CNVice.rep=function(Nj,repeticoes,f,filename='CNVice.RData',apagarRData=TRUE){
 	load(filename)
 	print('CNVice file loaded')
 	file.copy(filename,'bkpCNViceRData')
-  }else{#inicializa as variáveis
+  }else{#inicializa as vari�veis
 	print('CNVice file generated')
 	print('CNVice repetition: 1')
 	aux=CNVice(Nj, p0.rep[1,], 1000,f)
@@ -438,7 +438,7 @@ trio <- function(pai,mae,filho,matriz){ # Child probability given parents and ge
     }
   }
 
-  cat("Offsprings genotype probabilities:\n")
+  cat("Offsprings genotype probabilities:\n")
   filhos$prob=filhos$prob.filho.dado.paimae*filhos$prob.pai*filhos$prob.mae
   filhos$prob.final=round(filhos$prob/sum(filhos$prob),7)##final probability
   filhos$prob.mae=round(filhos$prob.mae,7)
@@ -516,9 +516,9 @@ TRV=function(Nj,repeticoes,filename_F0='TRV_F0.RData',filename_FS='TRV_Fs.RData'
 ######################################################################################################################
 ######## Execution
 ######################################################################################################################
-executeCnvice <- function(Nj,estimar_F,rept=100,document="CNViceReport",decimaisProb=3,decimaisF=3,result=1,filename_backup='backup.RData',apagarRData=TRUE){
+executeCnvice <- function(Nj,estimar_F,rept=100,document="",decimaisProb=3,decimaisF=3,result=1,filename_backup='backup.RData',apagarRData=TRUE){
 #estimar_F: estimate F statistic or consider it zero
-#document: document name where the report will be written
+#document: document name where the report will be written; IF EMPTY, OUTPUT IS NOT WRITTEN.
 #result=1 : show best result
 #filename_backup: back up file name
 #apagarRData: delete backup file? (TRUE or FALSE)
@@ -656,49 +656,56 @@ executeCnvice <- function(Nj,estimar_F,rept=100,document="CNViceReport",decimais
   tabela=tabela[,c(1,2,3,6,4,7,5,8)]
 
   endtime = Sys.time()
-
-  library(hwriter)
-  ##printing data
-  a=openPage(paste(document,".doc",sep=""))
-  hwrite('Data Summary',a,a)
-  hwrite(tabela,a,a,br=TRUE,borders=0) #data summary
-
-  hwrite('Alternative estimations count: ',a,a)
-  hwrite(matrix(c(1:length(contagem),contagem),ncol=length(contagem),byrow=T),a,a,br=TRUE) #ocurrence count
-
-  hwrite('F values found for each estimation: ',a,a)
-  hwrite(matrix(c(1:length(fs),fs),ncol=length(fs),byrow=T),a,a,br=TRUE) #F values
-
-  hwrite('TRV results: ',a,a,br=TRUE)
-  hwrite('Value of statistic found by TRV: ',a,a)
-  hwrite(round(trv$trv,5),a,a,br=TRUE)
-  hwrite('Reject H0, i.e., F different than ZERO?',a,a,br=TRUE)
-  if(trv$rejeita){
-	hwrite('Yes',a,a,br=TRUE)
-  }else{
-	hwrite('No',a,a,br=TRUE)
-  }
-
-  hwrite('<br>P-values for Kolmogorov-Smirnov tests:',a,a)
-  hwrite(matrix(c(1:length(pvalores),round(pvalores,decimaisProb)),ncol=length(pvalores),byrow=T),a,a,br=TRUE)
-
-  hwrite('<br>Population genotype probability:',a,a)
-  hwrite(matriz,a,a,br=TRUE) #estimated.genotype
-  hwrite("Individual genotype probability (given the individual's copy number)",a,a)
-  for(i in 0:(length(Nj)-1)){
-    hwrite((t(round(Pgenot.ind(i,estimated.genotype),decimaisProb))),a,a)
-  }
-  hwrite('<br>',a,a)
-  #hwrite('Probabilidade Genotipica dado que o filho tem x copias, dado que o Pai tem y copias e a Mae z copias.',a,a)
-  #hwrite(trio(4,3,3,estimated.genotype),a,a,br=TRUE)
-  hwrite('Runtime (start,end):<br>',a,a)
-  hwrite(toString(starttime),a,a)
-  hwrite('<br>',a,a)
-  hwrite(toString(endtime),a,a,br=TRUE)
-  print("Total time: ")
-  print(starttime)
-  print(endtime)
-  closePage(a,splash=F)
   
-  return(estimated.genotype)
+  if(document != ""){
+    library(hwriter)
+    ##printing data
+    a=openPage(paste(document,".doc",sep=""))
+    hwrite('Data Summary',a,a)
+    hwrite(tabela,a,a,br=TRUE,borders=0) #data summary
+  
+    hwrite('Alternative estimations count: ',a,a)
+    hwrite(matrix(c(1:length(contagem),contagem),ncol=length(contagem),byrow=T),a,a,br=TRUE) #ocurrence count
+  
+    hwrite('F values found for each estimation: ',a,a)
+    hwrite(matrix(c(1:length(fs),fs),ncol=length(fs),byrow=T),a,a,br=TRUE) #F values
+  
+    hwrite('Likelihood ratio (LR) test: ',a,a,br=TRUE)
+    hwrite('Value of statistic found by LR: ',a,a)
+    hwrite(round(trv$trv,5),a,a,br=TRUE)
+    hwrite('Reject H0, i.e., F different than ZERO?',a,a,br=TRUE)
+    if(trv$rejeita){
+  	hwrite('Yes',a,a,br=TRUE)
+    }else{
+  	hwrite('No',a,a,br=TRUE)
+    }
+  
+    hwrite('<br>P-values for Kolmogorov-Smirnov tests:',a,a)
+    hwrite(matrix(c(1:length(pvalores),round(pvalores,decimaisProb)),ncol=length(pvalores),byrow=T),a,a,br=TRUE)
+  
+    hwrite('<br>Population genotype probability:',a,a)
+    hwrite(matriz,a,a,br=TRUE) #estimated.genotype
+    hwrite("Individual genotype probability (given the individual's copy number)",a,a)
+    for(i in 0:(length(Nj)-1)){
+      hwrite((t(round(Pgenot.ind(i,estimated.genotype),decimaisProb))),a,a)
+    }
+    hwrite('<br>',a,a)
+    #hwrite('Probabilidade Genotipica dado que o filho tem x copias, dado que o Pai tem y copias e a Mae z copias.',a,a)
+    #hwrite(trio(4,3,3,estimated.genotype),a,a,br=TRUE)
+    hwrite('Runtime (start,end):<br>',a,a)
+    hwrite(toString(starttime),a,a)
+    hwrite('<br>',a,a)
+    hwrite(toString(endtime),a,a,br=TRUE)
+    print("Total time: ")
+    print(starttime)
+    print(endtime)
+    closePage(a,splash=F)
+  }
+  # OUTPUT:
+  # Estimated allele frequencies (tabela)
+  # Estimated population genotpye frequencies (estimated.genotype)
+  # Estimated individual genotype frequencies (?)
+  
+  returnList <- list("allele_frequencies" = tabela, "genotype_frequencies" = estimated.genotype, "genotype_frequencies2" = estimated.genotype.mult2)
+  return(returnList)
 }
